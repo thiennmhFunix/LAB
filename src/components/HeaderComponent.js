@@ -6,6 +6,7 @@ class Header extends Component {
 
     constructor(props) {
         super(props);
+        this.wrapper = React.createRef();
 
         this.state = {
             isNavOpen: false,
@@ -32,11 +33,13 @@ class Header extends Component {
     handleLogin(event) {
         this.toggleModal();
         alert("Username: " + this.username.value + " Password: " + this.password.value + " Remember: " + this.remember.checked);
+        console.log("Username: " + this.username.value + " Password: " + this.password.value + " Remember: " + this.remember.checked);
         event.preventDefault();
     }
 
     render() {
         return(
+            <div ref={this.wrapper}>
             <React.Fragment>
                 <Navbar dark expand="md">
                     <div className='container'>
@@ -109,6 +112,7 @@ class Header extends Component {
                     </ModalBody>
                 </Modal>
             </React.Fragment>
+            </div>
         );
     }
 }
