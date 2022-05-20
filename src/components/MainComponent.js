@@ -14,7 +14,12 @@ import {
 	useNavigate,
 } from "react-router-dom";
 import { connect } from "react-redux";
-import { addComment, fetchDishes } from "../redux/ActionCreators";
+import {
+	addComment,
+	fetchDishes,
+	fetchComments,
+	fetchPromos,
+} from "../redux/ActionCreators";
 import { actions } from "react-redux-form";
 
 function withRouter(Component) {
@@ -44,6 +49,12 @@ const mapDispatchToProps = (dispatch) => ({
 	fetchDishes: () => {
 		dispatch(fetchDishes());
 	},
+	fetchComments: () => {
+		dispatch(fetchComments());
+	},
+	fetchPromos: () => {
+		dispatch(fetchPromos());
+	},
 	// reset form after submitting
 	resetFeedbackForm: () => {
 		dispatch(actions.reset("feedback"));
@@ -57,6 +68,8 @@ class Main extends Component {
 
 	componentDidMount() {
 		this.props.fetchDishes();
+		this.props.fetchComments();
+		this.props.fetchPromos();
 	}
 
 	render() {
@@ -72,10 +85,11 @@ class Main extends Component {
 					}
 					isLoading={this.props.dishes.isLoading}
 					errMess={this.props.dishes.errMess}
-					comments={this.props.comments.filter(
+					comments={this.props.comments.comments.filter(
 						(comment) => comment.dishId === parseInt(params.dishId, 10)
 					)}
 					addComment={this.props.addComment}
+					commentsErrMess={this.props.comments.errMess}
 				/>
 			);
 		};
@@ -94,10 +108,12 @@ class Main extends Component {
 								dishesLoading={this.props.dishes.isLoading}
 								dishesErrMess={this.props.dishes.errMess}
 								promotion={
-									this.props.promotions.filter(
+									this.props.promotions.promotions.filter(
 										(promotion) => promotion.featured
 									)[0]
 								}
+								promosLoading={this.props.promotions.isLoading}
+								promosErrMess={this.props.promotions.errMess}
 								leader={
 									this.props.leaders.filter((leader) => leader.featured)[0]
 								}
@@ -107,7 +123,7 @@ class Main extends Component {
 					<Route
 						exact
 						path="menu"
-						element={<Menu dishes={this.props.dishes} />}
+						element={<Menu dishes={this.props.dishes} />} // this.props.dishes.dishes is defined in MenuComponent!
 					/>
 					<Route path="menu/:dishId" element={<DishWithId />} />
 					<Route
