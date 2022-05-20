@@ -20,10 +20,10 @@ import { Loading } from "./LoadingComponent";
 import { baseUrl } from "../shared/baseUrl";
 
 function CommentForm(props) {
-	const { dishId, addComment } = props;
+	const { dishId, postComment } = props;
 
 	const [isModalOpen, setModalOpen] = useState(false);
-	const [newRating, setNewRating] = useState("");
+	const [newRating, setNewRating] = useState("5");
 	const [newAuthor, setNewAuthor] = useState("");
 	const [newComment, setNewComment] = useState("");
 
@@ -37,7 +37,7 @@ function CommentForm(props) {
 
 	function handleAdd() {
 		toggleModal();
-		addComment(dishId, newRating, newAuthor, newComment);
+		postComment(dishId, newRating, newAuthor, newComment);
 	}
 
 	return (
@@ -159,7 +159,10 @@ function RenderDish(props) {
 						<CardText>
 							{props.comments.map((comment) => RenderComment(comment))}
 						</CardText>
-						<CommentForm dishId={props.dishId} addComment={props.addComment} />
+						<CommentForm
+							dishId={props.dishId}
+							postComment={props.postComment}
+						/>
 					</CardBody>
 				</div>
 			</div>
@@ -204,7 +207,7 @@ const DishDetail = (props) => {
 				<RenderDish
 					dish={props.dish}
 					comments={props.comments}
-					addComment={props.addComment}
+					postComment={props.postComment}
 					dishId={props.dish.id}
 				/>
 			</div>
