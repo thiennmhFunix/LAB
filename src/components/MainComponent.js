@@ -15,6 +15,7 @@ import {
 } from "react-router-dom";
 import { connect } from "react-redux";
 import { addComment, fetchDishes } from "../redux/ActionCreators";
+import { actions } from "react-redux-form";
 
 function withRouter(Component) {
 	function ComponentWithRouterProp(props) {
@@ -37,10 +38,15 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-	addComment: (dishId, rating, author, comment) =>
-		dispatch(addComment(dishId, rating, author, comment)),
+	addComment: (dishId, rating, author, comment) => {
+		dispatch(addComment(dishId, rating, author, comment));
+	},
 	fetchDishes: () => {
 		dispatch(fetchDishes());
+	},
+	// reset form after submitting
+	resetFeedbackForm: () => {
+		dispatch(actions.reset("feedback"));
 	},
 });
 
@@ -104,7 +110,13 @@ class Main extends Component {
 						element={<Menu dishes={this.props.dishes} />}
 					/>
 					<Route path="menu/:dishId" element={<DishWithId />} />
-					<Route exact path="contactus" element={<Contact />} />
+					<Route
+						exact
+						path="contactus"
+						element={
+							<Contact resetFeedbackForm={this.props.resetFeedbackForm} />
+						}
+					/>
 					<Route path="*" element={<Navigate to="/home" replace />} />
 				</Routes>
 				<Footer />
